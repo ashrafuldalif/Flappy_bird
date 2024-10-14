@@ -18,10 +18,10 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
     int wHeight = 640;
 
     // IMAGES_______________________________________
-    Image background_img;
-    Image Character;
-    Image TopPipeImg;
-    Image BottomPipeImg;
+    Image background_img  = new ImageIcon(getClass().getResource("./flappybirdbg.png")).getImage();
+    Image Character  = new ImageIcon(getClass().getResource("./flappybird.png")).getImage();
+    Image TopPipeImg  = new ImageIcon(getClass().getResource("./toppipe.png")).getImage();
+    Image BottomPipeImg  = new ImageIcon(getClass().getResource("./bottompipe.png")).getImage();
 
     // Bird _________________________________________
     int birdX = wWidth / 8;
@@ -66,7 +66,7 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
 
     // game logic
     Bird bird;
-    int velocityX = -6;
+    int velocityX = -4;
     int velocityY = 0;
     int gravity = 1;
     double score = 0;
@@ -83,10 +83,7 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
         setFocusable(true);
         addKeyListener(this);
 
-        background_img = new ImageIcon(getClass().getResource("./flappybirdbg.png")).getImage();
-        Character = new ImageIcon(getClass().getResource("./flappybird.png")).getImage();
-        TopPipeImg = new ImageIcon(getClass().getResource("./toppipe.png")).getImage();
-        BottomPipeImg = new ImageIcon(getClass().getResource("./bottompipe.png")).getImage();
+// )____
 
         bird = new Bird(Character);
         pipes = new ArrayList<>();
@@ -168,7 +165,7 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            velocityY = -15;
+            velocityY = -12;
             if (gameOver) {
                 bird.y = birdY;
                 velocityY = 0;
@@ -203,6 +200,7 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
         if (gameOver) {
             placePipesTimer.stop();
             gameLoop.stop();
+            
         }
     }
 }
