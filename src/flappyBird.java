@@ -18,10 +18,10 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
     int wHeight = 640;
 
     // IMAGES_______________________________________
-    Image background_img  = new ImageIcon(getClass().getResource("./flappybirdbg.png")).getImage();
-    Image Character  = new ImageIcon(getClass().getResource("./flappybird.png")).getImage();
-    Image TopPipeImg  = new ImageIcon(getClass().getResource("./toppipe.png")).getImage();
-    Image BottomPipeImg  = new ImageIcon(getClass().getResource("./bottompipe.png")).getImage();
+    Image background_img = new ImageIcon(getClass().getResource("./flappybirdbg.png")).getImage();
+    Image Character = new ImageIcon(getClass().getResource("./flappybird.png")).getImage();
+    Image TopPipeImg = new ImageIcon(getClass().getResource("./toppipe.png")).getImage();
+    Image BottomPipeImg = new ImageIcon(getClass().getResource("./bottompipe.png")).getImage();
 
     // Bird _________________________________________
     int birdX = wWidth / 8;
@@ -33,7 +33,7 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
     int pipeWidth = 64;
     int pipeHeight = 512;
 
-    int gapHeight = 200; 
+    int gapHeight = 200;
 
     class Bird { // BIRD CLASS__________________
 
@@ -84,7 +84,6 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
         addKeyListener(this);
 
 // )____
-
         bird = new Bird(Character);
         pipes = new ArrayList<>();
 
@@ -97,6 +96,8 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
         placePipesTimer.start();
         gameLoop = new Timer(1000 / 50, this);
         gameLoop.start();
+        
+
     }
 
     public void placePipes() {
@@ -105,11 +106,12 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
 
         // Create top pipe
         pipe topPipe = new pipe(wWidth, pipeGapY - pipeHeight, TopPipeImg);
-        pipes.add(topPipe);
+pipes.add(topPipe);
 
         // Create bottom pipe
         pipe bottomPipe = new pipe(wWidth, pipeGapY + gapHeight, BottomPipeImg);
         pipes.add(bottomPipe);
+        
     }
 
     @Override
@@ -200,7 +202,7 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
         if (gameOver) {
             placePipesTimer.stop();
             gameLoop.stop();
-            
+
         }
     }
 }
