@@ -8,83 +8,68 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import MyMenu.flappyBird;
+import javax.swing.*;
 
 public class StartMenu extends JPanel implements ActionListener {
 
-    int wWidth = 360;
-    int wHeight = 640;
-    flappyBird f;
-    // Rectangle 1
-    int rectHeight = 70;
-    int rectWidth = 180;
-    // x 30 y 150
-    int rectX = ((wWidth - rectWidth) / 2) - 10;
-    int rectY = 150;
+    private JFrame frame;
+    All_variables var = new All_variables();
 
-    int buttonWidth = 220;
-    int buttonHeight = 60;
-    int BtnGap = 0;
-    // Calculate button position for Rectangle 1
-    int buttonX = rectX + (rectWidth - buttonWidth) / 2;
-    int buttonY = rectY + (rectHeight - buttonHeight) / 2;
+    int wWidth = var.wWidth;
+    int wHeight = var.wHeight;
+
+    int rectHeight = var.rectHeight;
+    int rectWidth = var.rectWidth;
+    int rectX = var.rectX;
+    int rectY = var.rectY;
+
+    int buttonWidth = var.buttonWidth;
+    int buttonHeight = var.buttonHeight;
+    int BtnGap = var.BtnGap;
+
+    int buttonX = var.buttonX;
+    int buttonY = var.buttonY;
 
     JButton startBtn;
     JButton difficultyBtn;
     JButton guidBtn;
     JButton scoresBtn;
-    JFrame frame = new JFrame("MIM The Pakhi");
 
-    public StartMenu() {
-
+    public StartMenu(JFrame frame) {
+        this.frame = frame;
         setPreferredSize(new Dimension(wWidth, wHeight));
         setBackground(Color.black);
 
-        // Disable layout manager (absolute positioning)
         setLayout(null);
 
-        // Initialize buttons
         startBtn = new JButton("Start");
         difficultyBtn = new JButton("Difficulty");
         scoresBtn = new JButton("Scores");
         guidBtn = new JButton("Guide");
-        // Customize buttons
+
         SameBtnStyle(startBtn);
         SameBtnStyle(difficultyBtn);
         SameBtnStyle(scoresBtn);
         SameBtnStyle(guidBtn);
-        // Create JFrame
-        frame.setSize(wWidth, wHeight);
-        frame.setLocationRelativeTo(null);
-        frame.setResizable(false);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(this); // Add JPanel to the frame
-
-        frame.setVisible(true);
     }
 
     private void SameBtnStyle(JButton button) {
-        button.setContentAreaFilled(false);  // Remove background fill
-        button.setBorderPainted(false);      // Remove the border
-        button.setOpaque(false);             // Make it fully transparent
-        button.setFocusPainted(false);       // Remove focus outline
-        button.setForeground(Color.WHITE);   // Set text color to white
-        button.setFont(new Font("Arial", Font.BOLD, 25)); // Set font
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        button.setOpaque(false);
+        button.setFocusPainted(false);
+        button.setForeground(Color.WHITE);
+        button.setFont(new Font("Arial", Font.BOLD, 25));
         button.setBounds(buttonX, buttonY + BtnGap, buttonWidth, buttonHeight);
         button.addActionListener(this);
         add(button);
         BtnGap += 100;
     }
 
-    // Custom painting for the menu title
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g); // Always call super method first to clear the screen
-
-        draw(g); // Call your draw function to render the menu
+        super.paintComponent(g);
+        draw(g);
     }
 
     public void draw(Graphics g) {
@@ -108,29 +93,28 @@ public class StartMenu extends JPanel implements ActionListener {
             g2d.fillRoundRect(rectX, rectY + Gap, rectWidth, rectHeight, 50, 50);
             Gap += gaps;
         }
-
     }
 
-    // Handle button clicks
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == startBtn) {
-
             System.out.println("Start button clicked!");
             frame.getContentPane().removeAll();
-            frame.repaint(); // Repaint to clear the old components
-            flappyBird f = new flappyBird(); // Add the new panel
-            frame.add(f);
-            frame.revalidate(); //
+            JFrame nframe = new JFrame("MIM The Pakhi");
+            nframe.setSize(wWidth, wHeight);
+            nframe.setLocationRelativeTo(null);
+            nframe.setResizable(false);
+            nframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            flappyBird game = new flappyBird();
+            nframe.add(game);
+            nframe.setVisible(true);
+
         } else if (e.getSource() == difficultyBtn) {
             System.out.println("Difficulty button clicked!");
-            // Handle difficulty button action
         } else if (e.getSource() == scoresBtn) {
             System.out.println("Scores button clicked!");
-            // Handle scores button action
         } else if (e.getSource() == guidBtn) {
             System.out.println("Guide button clicked!");
         }
     }
-
 }

@@ -1,27 +1,23 @@
 
+import MyMenu.All_variables;
+import MyMenu.StartMenu;
 import javax.swing.JFrame;
 
 public class App {
 
-    public static void main(String[] args) throws Exception {
-        int wWidth = 360;
-        int wHeight = 640;
+    public static void main(String[] args) {
+
         JFrame frame = new JFrame("MIM The Pakhi");
-        // frame.setVisible(true);
+        All_variables var = new All_variables();
+        int wWidth = var.wWidth;
+        int wHeight = var.wHeight;
         frame.setSize(wWidth, wHeight);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        flappyBird flappy_Bird = new flappyBird();
+        StartMenu main_Menu = new StartMenu(frame);
+        frame.add(main_Menu);
 
-
-        // frame.add(start_Menu);
-        // start_Menu.requestFocus();
-        frame.add(flappy_Bird);
-        // frame.add(startMenu);
-        frame.pack();
-        // flappy_Bird.requestFocus();
         frame.setVisible(true);
     }
-
 }
