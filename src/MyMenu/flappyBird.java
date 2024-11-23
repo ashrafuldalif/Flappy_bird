@@ -1,26 +1,17 @@
 package MyMenu;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.*;
-import org.w3c.dom.css.RGBColor;
 
 public class flappyBird extends JPanel implements ActionListener, KeyListener {
 
-    All_variables var = new All_variables();
-    int wWidth = var.wWidth;
-    int wHeight = var.wHeight;
-
+    Sob_variables V = new Sob_variables();
+    int wWidth = V.wWidth;
+    int wHeight = V.wHeight;
+    JFrame frame;
     // IMAGES_______________________________________
     Image background_img = new ImageIcon(getClass().getResource("flappybirdbg.png")).getImage();
     Image Character = new ImageIcon(getClass().getResource("flappybird.png")).getImage();
@@ -28,62 +19,37 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
     Image BottomPipeImg = new ImageIcon(getClass().getResource("bottompipe.png")).getImage();
 
     // Bird _________________________________________
-    int birdX = var.birdX;
-    int birdY = var.birdY;
-    int birdWidth = var.birdWidth;
-    int birdHeight = var.birdHeight;
+    int birdX = V.birdX;
+    int birdY = V.birdY;
+    int birdWidth = V.birdWidth;
+    int birdHeight = V.birdHeight;
 
-    // Pipes
-    int pipeWidth = var.pipeWidth;
-    int pipeHeight = var.pipeHeight;
+    // Pipes _________________________________________
+    int pipeWidth = V.pipeWidth;
+    int pipeHeight = V.pipeHeight;
+    int gapHeight = V.gapHeight;
 
-    int gapHeight = var.gapHeight;
-
-    class Bird { // BIRD CLASS__________________
-
-        int x = birdX;
-        int y = birdY;
-        int width = birdWidth;
-        int height = birdHeight;
-        Image img;
-
-        Bird(Image img) {
-            this.img = img;
-        }
-    }
-
-    class pipe {   // PIPE CLASS__________________
-
-        int x;
-        int y;
-        int width = pipeWidth;
-        int height = pipeHeight;
-        boolean passed = false;
-        Image img;
-
-        pipe(int x, int y, Image img) {
-            this.x = x;
-            this.y = y;
-            this.img = img;
-        }
-    }
-
-    // game logic
+    // Game Variables
     Bird bird;
-    int velocityX = var.velocityX;
-    int velocityY = var.velocityY;
-    int gravity = var.gravity;
-    double score = var.score;
-    int fps = var.fps;
+    int velocityX = V.velocityX;
+    int velocityY = V.velocityY;
+    int gravity = V.gravity;
+    double score = V.score;
+    int fps = V.fps;
 
     Timer gameLoop;
     Timer placePipesTimer;
     boolean gameOver = false;
-    boolean checkSmallMenu = false;
+    boolean checkPaused = false;
     ArrayList<pipe> pipes;
 
-    public flappyBird() {
+        // Create buttons
+    JButton resume = new JButton("Resume");
+    JButton restart = new JButton("Restart");
+    JButton quit = new JButton("Quit");
 
+    public flappyBird( JFrame f) {
+        frame=f;
         setPreferredSize(new Dimension(wWidth, wHeight));
         setFocusable(true);
         addKeyListener(this);
@@ -91,67 +57,143 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
         bird = new Bird(Character);
         pipes = new ArrayList<>();
 
-        placePipesTimer = new Timer(1500, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                placePipes();
-            }
-        });
-        // placePipesTimer.start();
+        // Place pipes every 1.5 seconds
+        placePipesTimer = new Timer(1500, e -> placePipes());
         gameLoop = new Timer(1000 / fps, this);
-        // gameLoop.start();
-
     }
 
+    // Place pipes
     public void placePipes() {
         Random rand = new Random();
         int pipeGapY = rand.nextInt(wHeight - gapHeight - 200) + 100;
 
-        // Create top pipe
+        // Top pipe
         pipe topPipe = new pipe(wWidth, pipeGapY - pipeHeight, TopPipeImg);
         pipes.add(topPipe);
 
-        // Create bottom pipe
+        // Bottom pipe
         pipe bottomPipe = new pipe(wWidth, pipeGapY + gapHeight, BottomPipeImg);
         pipes.add(bottomPipe);
-
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         draw(g);
-        if (checkSmallMenu == true) {
-            pauseMenu(g);
-        }
-
     }
 
-    public void pauseMenu(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(new Color(0, 50, 50, 100));
-        g2d.fillRoundRect(80, 120, 200, 400,50, 50);
+    public void pauseMenu() {
         
+        removeAll(); // Remove previous components
+        setLayout(null); // Use null layout for custom positioning
 
+
+        // Add action listeners
+        resume.addActionListener(e -> resumeGame());
+        restart.addActionListener(e -> restartGame());
+        quit.addActionListener(e ->quit() ); 
+
+        // Style and position buttons
+        addStyledButton(resume, 100);
+        addStyledButton(restart, 200);
+        addStyledButton(quit, 300);
+
+        revalidate();
+        repaint();
     }
+
+    private void addStyledButton(JButton button, int yOffset) {
+
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        button.setOpaque(false);
+        button.setFocusPainted(false);
+        button.setForeground(Color.WHITE);
+        button.setFont(new Font("Arial", Font.BOLD, 25));
+        button.setBounds(wWidth / 2 - 75, yOffset, 150, 50); // Center the buttons
+        add(button);
+    }
+
+    private void resumeGame() {
+
+        checkPaused = false;
+        placePipesTimer.start();
+        gameLoop.start();
+        removeAll(); // Remove pause menu buttons
+        revalidate();
+        repaint();
+    }
+    private void quit(){
+        System.out.println("quit button clicked!");
+        frame.getContentPane().removeAll();
+        frame.dispose();
+        JFrame nframe = new JFrame("MIM The Pakhi");
+        nframe.setSize(wWidth, wHeight);
+        nframe.setLocationRelativeTo(null);
+        nframe.setResizable(false);
+        nframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        StartMenu game = new StartMenu(frame);
+        nframe.add(game);
+        nframe.pack();
+        nframe.setVisible(true);
+    }
+
+    // Method to initialize/reset the game
+
+    private void initializeGame() {
+        removeAll();
+        bird = new Bird(Character); // Reset bird
+        pipes = new ArrayList<>(); // Reset pipes
+        score = 0; // Reset score
+        gameOver = false; // Reset game over state
+        checkPaused = false; // Reset paused state
+
+        // Initialize timers
+        placePipesTimer = new Timer(1500, e -> placePipes());
+        gameLoop = new Timer(1000 / fps, this);
+    }
+
+
+    // Method to restart the game
+
+    private void restartGame() {
+
+        initializeGame(); // Reset everything
+    
+        gameLoop.start(); // Start the game loop
+    
+        placePipesTimer.start(); // Start placing pipes
+    
+        repaint(); // Repaint the panel
+    
+    }
+
 
     public void draw(Graphics g) {
+        // Draw background and bird
         g.drawImage(background_img, 0, 0, wWidth, wHeight, null);
         g.drawImage(bird.img, bird.x, bird.y, bird.width, bird.height, null);
+
+        // Draw pipes
         for (pipe p : pipes) {
             g.drawImage(p.img, p.x, p.y, p.width, p.height, null);
         }
+
+        // Display score
         g.setColor(Color.white);
         g.setFont(new Font("Arial", Font.PLAIN, 32));
-
         if (gameOver) {
-            g.setColor(Color.red);
-            g.drawString("_GAME OVER_ : " + String.valueOf((int) score), 10, 35);
+            gameover(g);
         } else {
-            g.setColor(Color.white);
-
             g.drawString(String.valueOf((int) score), 10, 35);
         }
+
+        // Draw pause menu overlay if paused
+        if (checkPaused) {
+            g.setColor(new Color(0, 0, 0, 100));
+            g.fillRect(0, 0, wWidth, wHeight);
+        }
+
     }
 
     public void move() {
@@ -163,9 +205,9 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
             pipe p = pipes.get(i);
             p.x += velocityX;
 
-            if ((!p.passed) && (bird.x > p.x + p.width)) {
+            if (!p.passed && bird.x > p.x + p.width) {
                 p.passed = true;
-                score += .5;
+                score += 0.5;
             }
 
             if (collision(bird, p)) {
@@ -177,57 +219,64 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
             gameOver = true;
         }
     }
-    boolean first = true;
 
+    public void gameover(Graphics g) {
+        gameLoop.stop();
+        placePipesTimer.stop(); // Ensure pipes stop moving
+        g.setColor(Color.red);
+        checkPaused = true;
+        g.drawString("_GAME OVER_ : " + String.valueOf((int) score), (wWidth - 260) / 2, 65);
+        addStyledButton(restart, 200);
+        addStyledButton(quit, 300);
+        revalidate();
+        repaint();  
+    }
     @Override
-
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            if (first == true) {
-                checkSmallMenu = true;
+            if (!checkPaused) {
+                checkPaused = true;
                 placePipesTimer.stop();
                 gameLoop.stop();
+                pauseMenu();
+            }else {
+                resumeGame();
+            }
+        }
 
-                first = false;
+
+    if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+
+        if (gameOver) {
+            
+            gameover(getGraphics());
+            
+        } else {
+
+            if (!gameLoop.isRunning()) {
+
+                gameLoop.start();
+
+                placePipesTimer.start(); // Start pipe placement when game starts
+
+
             } else {
-                placePipesTimer.start();
-                gameLoop.start();
-                checkSmallMenu = false;
-                first = true;
-            }
-            repaint();
-        }
-        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 
-            if (var.firstTime == true) {
-                placePipesTimer.start();
-                // gameLoop = new Timer(1000 / 50, this);
-                gameLoop.start();
-                var.firstTime = false;
+                velocityY = -12; // Make the bird jump
+
             }
-            if (gameLoop.isRunning()) {
-                velocityY = -12;
-            }
-            if (gameOver) {
-                bird.y = birdY;
-                velocityY = 0;
-                pipes.clear();
-                score = 0;
-                gameOver = false;
-                var.firstTime = true;
-                // gameLoop.start();
-                // placePipesTimer.start();
-            }
+
         }
+
+    }
+
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
-    }
+    public void keyTyped(KeyEvent e) {}
 
     @Override
-    public void keyReleased(KeyEvent e) {
-    }
+    public void keyReleased(KeyEvent e) {}
 
     public boolean collision(Bird a, pipe b) {
         return a.x < b.x + b.width
@@ -238,12 +287,37 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        move();
+        if (!gameOver && !checkPaused) {
+            move();
+        }
         repaint();
-        if (gameOver) {
-            placePipesTimer.stop();
-            gameLoop.stop();
+    }
 
+    // Bird and Pipe Classes
+    class Bird {
+        int x = birdX;
+        int y = birdY;
+        int width = birdWidth;
+        int height = birdHeight;
+        Image img;
+
+        Bird(Image img) {
+            this.img = img;
+        }
+    }
+
+    class pipe {
+        int x;
+        int y;
+        int width = pipeWidth;
+        int height = pipeHeight;
+        boolean passed = false;
+        Image img;
+
+        pipe(int x, int y, Image img) {
+            this.x = x;
+            this.y = y;
+            this.img = img;
         }
     }
 }

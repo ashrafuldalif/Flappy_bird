@@ -13,7 +13,7 @@ import javax.swing.*;
 public class StartMenu extends JPanel implements ActionListener {
 
     private JFrame frame;
-    All_variables var = new All_variables();
+    Sob_variables var = new Sob_variables();
 
     int wWidth = var.wWidth;
     int wHeight = var.wHeight;
@@ -100,13 +100,15 @@ public class StartMenu extends JPanel implements ActionListener {
         if (e.getSource() == startBtn) {
             System.out.println("Start button clicked!");
             frame.getContentPane().removeAll();
+            frame.dispose();
             JFrame nframe = new JFrame("MIM The Pakhi");
             nframe.setSize(wWidth, wHeight);
             nframe.setLocationRelativeTo(null);
             nframe.setResizable(false);
             nframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            flappyBird game = new flappyBird();
+            flappyBird game = new flappyBird(nframe);
             nframe.add(game);
+            nframe.pack();
             nframe.setVisible(true);
 
         } else if (e.getSource() == difficultyBtn) {
