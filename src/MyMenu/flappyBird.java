@@ -48,6 +48,7 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
     JButton restart = new JButton("Restart");
     JButton quit = new JButton("Quit");
 
+
     public flappyBird( JFrame f) {
         frame=f;
         setPreferredSize(new Dimension(wWidth, wHeight));
@@ -66,11 +67,9 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
     public void placePipes() {
         Random rand = new Random();
         int pipeGapY = rand.nextInt(wHeight - gapHeight - 200) + 100;
-
         // Top pipe
         pipe topPipe = new pipe(wWidth, pipeGapY - pipeHeight, TopPipeImg);
         pipes.add(topPipe);
-
         // Bottom pipe
         pipe bottomPipe = new pipe(wWidth, pipeGapY + gapHeight, BottomPipeImg);
         pipes.add(bottomPipe);
@@ -82,28 +81,9 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
         draw(g);
     }
 
-    public void pauseMenu() {
-        
-        removeAll(); // Remove previous components
-        setLayout(null); // Use null layout for custom positioning
-
-
-        // Add action listeners
-        resume.addActionListener(e -> resumeGame());
-        restart.addActionListener(e -> restartGame());
-        quit.addActionListener(e ->quit() ); 
-
-        // Style and position buttons
-        addStyledButton(resume, 100);
-        addStyledButton(restart, 200);
-        addStyledButton(quit, 300);
-
-        revalidate();
-        repaint();
-    }
 
     private void addStyledButton(JButton button, int yOffset) {
-
+        
         button.setContentAreaFilled(false);
         button.setBorderPainted(false);
         button.setOpaque(false);
@@ -114,7 +94,29 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
         add(button);
     }
 
+
+
+
+    public void pauseMenu() {
+
+        resume.addActionListener(e -> resumeGame());
+        restart.addActionListener(e -> restartGame());
+        quit.addActionListener(e ->quit());
+
+        removeAll(); // Remove previous components
+        setLayout(null); // Use null layout for custom positioning
+        // Add action listeners
+        // Style and position buttons
+        addStyledButton(resume, 100);
+        addStyledButton(restart, 200);
+        addStyledButton(quit, 300);
+        revalidate();
+        repaint();
+    }
+
+
     private void resumeGame() {
+
 
         checkPaused = false;
         placePipesTimer.start();
@@ -123,49 +125,45 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
         revalidate();
         repaint();
     }
+
+
     private void quit(){
         System.out.println("quit button clicked!");
         frame.getContentPane().removeAll();
         frame.dispose();
-        JFrame nframe = new JFrame("MIM The Pakhi");
-        nframe.setSize(wWidth, wHeight);
-        nframe.setLocationRelativeTo(null);
-        nframe.setResizable(false);
-        nframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        StartMenu game = new StartMenu(frame);
-        nframe.add(game);
-        nframe.pack();
-        nframe.setVisible(true);
+
+//        JFrame nframe = new JFrame("MIM The Pakhi");
+//        nframe.setSize(wWidth, wHeight);
+//        nframe.setLocationRelativeTo(null);
+//        nframe.setResizable(false);
+//        nframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        StartMenu game = new StartMenu(frame);
+//        nframe.add(game);
+//        nframe.pack();
+//        nframe.setVisible(true);
+
+//        new StartMenu(frame);
+//        frame = nframe;
+
+        StartMenu main_Menu = new StartMenu(frame);
+        frame.add(main_Menu);
+        frame.setVisible(true);
     }
 
     // Method to initialize/reset the game
-
-    private void initializeGame() {
-        removeAll();
-        bird = new Bird(Character); // Reset bird
-        pipes = new ArrayList<>(); // Reset pipes
-        score = 0; // Reset score
-        gameOver = false; // Reset game over state
-        checkPaused = false; // Reset paused state
-
-        // Initialize timers
-        placePipesTimer = new Timer(1500, e -> placePipes());
-        gameLoop = new Timer(1000 / fps, this);
-    }
 
 
     // Method to restart the game
 
     private void restartGame() {
 
-        initializeGame(); // Reset everything
-    
-        gameLoop.start(); // Start the game loop
-    
-        placePipesTimer.start(); // Start placing pipes
-    
-        repaint(); // Repaint the panel
-    
+        frame.getContentPane().removeAll();
+        frame.dispose();
+        flappyBird game = new flappyBird(frame);
+        frame.add(game);
+        frame.pack();
+        frame.setVisible(true);
+
     }
 
 
@@ -190,7 +188,7 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
 
         // Draw pause menu overlay if paused
         if (checkPaused) {
-            g.setColor(new Color(0, 0, 0, 100));
+            g.setColor(new Color(238, 8, 8, 100));
             g.fillRect(0, 0, wWidth, wHeight);
         }
 
@@ -221,16 +219,37 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
     }
 
     public void gameover(Graphics g) {
+        // Stop game logic
         gameLoop.stop();
-        placePipesTimer.stop(); // Ensure pipes stop moving
-        g.setColor(Color.red);
+        placePipesTimer.stop();
         checkPaused = true;
-        g.drawString("_GAME OVER_ : " + String.valueOf((int) score), (wWidth - 260) / 2, 65);
+
+
+        removeAll();
+        setLayout(null);
+
+        // Display "Game Over" message
+        JLabel gameOverLabel = new JLabel("_GAME OVER_ : " + (int) score);
+        gameOverLabel.setFont(new Font("Arial", Font.BOLD, 32));
+        gameOverLabel.setForeground(Color.RED);
+        gameOverLabel.setBounds((wWidth - 260) / 2, 65, 300, 50);
+        add(gameOverLabel);
+
+
         addStyledButton(restart, 200);
         addStyledButton(quit, 300);
+
+        if (restart.getActionListeners().length == 0) {
+            restart.addActionListener(e -> restartGame());
+        }
+        if (quit.getActionListeners().length == 0) {
+            quit.addActionListener(e -> quit());
+        }
+
         revalidate();
-        repaint();  
+        repaint();
     }
+
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {

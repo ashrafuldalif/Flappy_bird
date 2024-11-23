@@ -1,5 +1,5 @@
-
-import MyMenu.*;
+import MyMenu.Sob_variables;
+import MyMenu.StartMenu;
 import javax.swing.JFrame;
 
  
@@ -14,10 +14,11 @@ public class App {
         frame.setSize(wWidth, wHeight);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         StartMenu main_Menu = new StartMenu(frame);
         frame.add(main_Menu);
- 
+
         frame.setVisible(true);
     }
 }
