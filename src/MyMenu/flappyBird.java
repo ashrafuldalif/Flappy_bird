@@ -59,7 +59,8 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
         pipes = new ArrayList<>();
 
         // Place pipes every 1.5 seconds
-        placePipesTimer = new Timer(1500, e -> placePipes());
+        placePipesTimer = new Timer(V.pipedistance, e -> placePipes());
+
         gameLoop = new Timer(1000 / fps, this);
     }
 
@@ -267,8 +268,8 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
     if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 
         if (gameOver) {
-            
-            gameover(getGraphics());
+
+            restartGame();
             
         } else {
 
@@ -276,12 +277,12 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
 
                 gameLoop.start();
 
-                placePipesTimer.start(); // Start pipe placement when game starts
+                placePipesTimer.start();
 
 
             } else {
 
-                velocityY = -12; // Make the bird jump
+                velocityY = -12;
 
             }
 

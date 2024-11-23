@@ -10,6 +10,7 @@ public class Sob_variables {
     public int wWidth = 360;
     public int wHeight = 640;
 
+
     int rectHeight = 70;
     int rectWidth = 180;
     
@@ -40,7 +41,11 @@ public class Sob_variables {
     int velocityY = 0;
     int gravity = 1;
     double score = 0;
-    int fps = 50;
+    int fps = 60;
+    int pipedistance = 1500;
+
+    int chose = 1;
+
     boolean firstTime=true;
     public void createRects(int times, int gaps, Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
