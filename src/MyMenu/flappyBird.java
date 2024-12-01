@@ -42,6 +42,8 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
     boolean gameOver = false;
     boolean checkPaused = false;
     ArrayList<pipe> pipes;
+    Color backClr = new Color(106, 234, 115, 100);
+
 
         // Create buttons
     JButton resume = new JButton("Resume");
@@ -91,7 +93,7 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
         button.setFocusPainted(false);
         button.setForeground(Color.WHITE);
         button.setFont(new Font("Arial", Font.BOLD, 25));
-        button.setBounds(wWidth / 2 - 75, yOffset, 150, 50); // Center the buttons
+        button.setBounds(wWidth / 2 - 75, yOffset, 150, 50); 
         add(button);
     }
 
@@ -129,32 +131,15 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
 
 
     private void quit(){
-        System.out.println("quit button clicked!");
         frame.getContentPane().removeAll();
         frame.dispose();
 
-//        JFrame nframe = new JFrame("MIM The Pakhi");
-//        nframe.setSize(wWidth, wHeight);
-//        nframe.setLocationRelativeTo(null);
-//        nframe.setResizable(false);
-//        nframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        StartMenu game = new StartMenu(frame);
-//        nframe.add(game);
-//        nframe.pack();
-//        nframe.setVisible(true);
-
-//        new StartMenu(frame);
-//        frame = nframe;
 
         StartMenu main_Menu = new StartMenu(frame);
         frame.add(main_Menu);
         frame.setVisible(true);
     }
 
-    // Method to initialize/reset the game
-
-
-    // Method to restart the game
 
     private void restartGame() {
 
@@ -180,16 +165,24 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
 
         // Display score
         g.setColor(Color.white);
-        g.setFont(new Font("Arial", Font.PLAIN, 32));
+        g.setFont(new Font("Arial", Font.BOLD, 32));
         if (gameOver) {
             gameover(g);
         } else {
+            backClr = new Color(106, 234, 115, 100);
+            String level = Sob_variables.levelText;
+            String classic=Sob_variables.clasicTxt;
+
+
             g.drawString(String.valueOf((int) score), 10, 35);
+            g.setColor(Color.black);
+
+            g.drawString(String.valueOf((String) (classic + level)),50,620 );
         }
 
         // Draw pause menu overlay if paused
         if (checkPaused) {
-            g.setColor(new Color(238, 8, 8, 100));
+            g.setColor(backClr);
             g.fillRect(0, 0, wWidth, wHeight);
         }
 
@@ -207,6 +200,7 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
             if (!p.passed && bird.x > p.x + p.width) {
                 p.passed = true;
                 score += 0.5;
+                // if()
             }
 
             if (collision(bird, p)) {
@@ -223,13 +217,13 @@ public class flappyBird extends JPanel implements ActionListener, KeyListener {
         // Stop game logic
         gameLoop.stop();
         placePipesTimer.stop();
+        backClr=new Color(150,0,20,100);
         checkPaused = true;
 
 
         removeAll();
         setLayout(null);
 
-        // Display "Game Over" message
         JLabel gameOverLabel = new JLabel("_GAME OVER_ : " + (int) score);
         gameOverLabel.setFont(new Font("Arial", Font.BOLD, 32));
         gameOverLabel.setForeground(Color.RED);

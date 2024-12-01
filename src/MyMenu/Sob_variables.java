@@ -1,7 +1,7 @@
 package MyMenu;
-import java.awt.Graphics2D;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class Sob_variables {
 
@@ -10,19 +10,16 @@ public class Sob_variables {
     public int wWidth = 360;
     public int wHeight = 640;
 
-
     int rectHeight = 70;
     int rectWidth = 180;
-    
-    
-    int rectX = ((wWidth - rectWidth) / 2) ;
+
+    int rectX = ((wWidth - rectWidth) / 2);
     int rectY = 150;
-    int border_radius=50;
+    int border_radius = 50;
     int buttonWidth = 220;
     int buttonHeight = 60;
     int BtnGap = 0;
 
-    
     int buttonX = rectX + (rectWidth - buttonWidth) / 2;
     int buttonY = rectY + (rectHeight - buttonHeight) / 2;
 
@@ -31,22 +28,23 @@ public class Sob_variables {
     int birdY = wHeight / 2;
     int birdWidth = 34;
     int birdHeight = 24;
-    
+
     int pipeWidth = 64;
     int pipeHeight = 512;
 
-    int gapHeight = 200;
-
-    int velocityX = -4;
     int velocityY = 0;
     int gravity = 1;
     double score = 0;
-    int fps = 60;
-    int pipedistance = 1500;
+    int velocityX = -4;
+    static int fps = 52;
+    static int gapHeight = 220;
+    static int pipedistance = 1600;
+    static String clasicTxt = "";
+    static String levelText = "_EASY";
+    static int chose = 2;
 
-    int chose = 1;
+    boolean firstTime = true;
 
-    boolean firstTime=true;
     public void createRects(int times, int gaps, Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         int Gap = 0;
@@ -57,3 +55,10 @@ public class Sob_variables {
     }
 
 }
+
+      
+     
+    
+        
+
+                

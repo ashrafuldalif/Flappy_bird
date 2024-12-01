@@ -32,7 +32,7 @@ public class StartMenu extends JPanel implements ActionListener {
 
     JButton startBtn;
     JButton difficultyBtn;
-    JButton guidBtn;
+    JButton exitBtn;
     JButton scoresBtn;
 
 
@@ -45,12 +45,12 @@ public class StartMenu extends JPanel implements ActionListener {
         startBtn = new JButton("Start");
         difficultyBtn = new JButton("Difficulty");
         scoresBtn = new JButton("Scores");
-        guidBtn = new JButton("Guide");
+        exitBtn = new JButton("Exit");
 
         SameBtnStyle(startBtn);
         SameBtnStyle(difficultyBtn);
         SameBtnStyle(scoresBtn);
-        SameBtnStyle(guidBtn);
+        SameBtnStyle(exitBtn);
 
 
 
@@ -59,28 +59,48 @@ public class StartMenu extends JPanel implements ActionListener {
 
     public void Speed(int pow){
 
-        Sob_variables sp = new Sob_variables();
-
         switch (pow){
             case 1:
-
+                var.clasicTxt="Classic ";
+                
                 break;
             case 2:
-
+                var.clasicTxt="";
+                var.velocityX = -4;
+                var.fps = 52;
+                var.gapHeight = 230;
+                var.pipedistance = 1600;
+                var.levelText="_EASY";
                 break;
             case 3:
-
+                var.clasicTxt = "";
+                var.velocityX = -5;
+                var.fps = 58;
+                var.gapHeight = 220;
+                var.pipedistance = 1500;
+                var.levelText = "_MEDIUM";
                 break;
 
             case 4:
-
+                var.clasicTxt = "";
+                var.velocityX = -7;
+                var.fps = 62;
+                var.gapHeight = 210;
+                var.pipedistance = 1400;
+                var.levelText = "_HARD";
                 break;
 
                         default:
 
                             break;
         }
+        
+        frame.getContentPane().removeAll();
+        frame.dispose();
 
+        StartMenu main_Menu = new StartMenu(frame);
+        frame.add(main_Menu);
+        frame.setVisible(true);
     }
 
 
@@ -96,7 +116,7 @@ public class StartMenu extends JPanel implements ActionListener {
         frame.add(startBtn);
         frame.add(difficultyBtn);
         frame.add(scoresBtn);
-        frame.add(guidBtn);
+        frame.add(exitBtn);
 
 
         JButton Classic = new JButton("Classic");
@@ -104,9 +124,10 @@ public class StartMenu extends JPanel implements ActionListener {
         JButton Medium = new JButton("Medium");
         JButton Hard = new JButton("Hard");
 
-
-
-//        Classic.addActionListener(e->)
+        Classic.addActionListener(e -> Speed(1));
+        Easy.addActionListener(e -> Speed(2));
+        Medium.addActionListener(e -> Speed(3));
+        Hard.addActionListener(e -> Speed(4));
 
 
         BtnGap=0;
@@ -123,42 +144,6 @@ public class StartMenu extends JPanel implements ActionListener {
         frame.revalidate();
         frame.repaint();
     }
-
-
-//    private void modesBtn() {
-//        // Clear the current content of the frame
-//        frame.getContentPane().removeAll();
-//
-//        // Set new layout and background for the frame
-//        setPreferredSize(new Dimension(wWidth, wHeight));
-//        setBackground(Color.black);
-//        frame.setLayout(null);
-//
-//        // Create new buttons
-//        JButton Classic = new JButton("Classic");
-//        JButton Easy = new JButton("Easy");
-//        JButton Medium = new JButton("Medium");
-//        JButton Hard = new JButton("Hard");
-//
-//        // Apply the same button style
-//        SameBtnStyle(Classic);
-//        SameBtnStyle(Easy);
-//        SameBtnStyle(Medium);
-//        SameBtnStyle(Hard);
-//
-//        // Position buttons (example positions, adjust as needed)
-////        Classic.setBounds(50, 50, 200, 50);
-////        Easy.setBounds(50, 120, 200, 50);
-////        Medium.setBounds(50, 190, 200, 50);
-////        Hard.setBounds(50, 260, 200, 50);
-//
-//
-//
-//        // Repaint and revalidate to update the frame
-//        frame.revalidate();
-//        frame.repaint();
-//    }
-
 
 
 
@@ -209,7 +194,6 @@ public class StartMenu extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == startBtn) {
-            System.out.println("Start button clicked!");
             frame.getContentPane().removeAll();
             frame.dispose();
             JFrame nframe = new JFrame("MIM The Pakhi");
@@ -223,12 +207,12 @@ public class StartMenu extends JPanel implements ActionListener {
             nframe.setVisible(true);
 
         } else if (e.getSource() == difficultyBtn) {
-            System.out.println("Difficulty button clicked!");
+
             modesBtn();
         } else if (e.getSource() == scoresBtn) {
             System.out.println("Scores button clicked!");
-        } else if (e.getSource() == guidBtn) {
-            System.out.println("Guide button clicked!");
+        } else if (e.getSource() == exitBtn) {
+            System.exit(0);
         }
     }
 }

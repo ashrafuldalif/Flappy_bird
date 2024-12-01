@@ -2,7 +2,6 @@ import MyMenu.Sob_variables;
 import MyMenu.StartMenu;
 import javax.swing.JFrame;
 
- 
 public class App {
 
     public static void main(String[] args) {
