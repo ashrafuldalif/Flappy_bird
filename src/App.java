@@ -7,7 +7,7 @@ public class App {
     public static void main(String[] args) {
 
         JFrame frame = new JFrame("MIM The Pakhi");
-        Sob_variables var = new Sob_variables();
+        Sob_variables var = new Sob_variables();  
         int wWidth = var.wWidth;
         int wHeight = var.wHeight;
         frame.setSize(wWidth, wHeight);
