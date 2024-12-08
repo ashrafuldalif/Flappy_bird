@@ -8,7 +8,7 @@ import javax.swing.ImageIcon;
 public class Sob_variables {
 
     Image[] background_img = {new ImageIcon(getClass().getResource("flappybirdbg.png")).getImage(),
-        new ImageIcon(getClass().getResource("flappybirdbg2.jpeg")).getImage(),
+        new ImageIcon(getClass().getResource("flappyBirdbg2.jpeg")).getImage(),
         new ImageIcon(getClass().getResource("flappybirdbg3.jpeg")).getImage()};
 
     Image[] TopPipeImg = {new ImageIcon(getClass().getResource("toppipe.png")).getImage(),
